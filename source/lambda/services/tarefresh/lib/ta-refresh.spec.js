@@ -32,10 +32,12 @@ describe('tarefresh', function() {
     beforeEach(function() {});
 
     afterEach(function() {
+      AWS.restore('ServiceQuotas')
       AWS.restore('Support');
     });
 
     it('should return success when TA refresh is successful', function(done) {
+      AWS.mock('ServiceQuotas', 'getAWSDefaultServiceQuota', Promise.resolve({"Quota":{"ServiceCode":""}}));
       AWS.mock('Support', 'refreshTrustedAdvisorCheck', function(
         params,
         callback
@@ -56,6 +58,7 @@ describe('tarefresh', function() {
     });
 
     it('should return success logging which TA check failed', function(done) {
+      AWS.mock('ServiceQuotas', 'getAWSDefaultServiceQuota', Promise.resolve({"Quota":{"ServiceCode":""}}));
       AWS.mock('Support', 'refreshTrustedAdvisorCheck', function(
         params,
         callback
